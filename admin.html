@@ -33,7 +33,7 @@
     <script>
         // Функция для получения заявок на регистрацию
         function fetchRegistrationRequests() {
-            fetch('http://slemsik.pythonanywhere.com/api/v1/get_registration_requests')
+            fetch('https://slemsik.pythonanywhere.com/api/v1/get_registration_requests')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Сетевая ошибка');
@@ -62,7 +62,7 @@
 
         // Функция для одобрения регистрации
         function approveRegistration(userId) {
-            fetch('http://slemsik.pythonanywhere.com/api/v1/approve_registration', {
+            fetch('https://slemsik.pythonanywhere.com/api/v1/approve_registration', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
