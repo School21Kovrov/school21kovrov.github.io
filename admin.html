@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Запросы на регистрацию</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <a href="main.html" class="back-button">&lt;</a>
+
+
+    <div class="container">
+        
+        <h1>Запросы на регистрацию</h1>
+        <table id="requests-table">
+            <thead>
+                <tr>
+                    <th>ФИО</th>
+                    <th>Класс</th>
+                    <th>Логин</th>
+                    <th>Действие</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Функция для получения заявок на регистрацию
+        function fetchRegistrationRequests() {
+            fetch('http://127.0.0.1:5000/api/v1/get_registration_requests')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Сетевая ошибка');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const tbody = document.querySelector('#requests-table tbody');
+                    tbody.innerHTML = ''; 
+                    data.requests.forEach(request => {
+                        const row = document.createElement('tr');
+                        const userId = request[0]; // Предполагается, что ID пользователя находится в первом элементе массива
+                        row.innerHTML = `
+                            <td>${request[2]}</td> <!-- ФИО -->
+                            <td>${request[3]}</td> <!-- Класс -->
+                            <td>${request[4]}</td> <!-- Логин -->
+                            <td><a href="#" onclick="approveRegistration(${userId}); return false;" class="approve-link">Одобрить</a></td> <!-- Ссылка одобрения -->
+                        `;
+                        tbody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                });
+        }
+
+        // Функция для одобрения регистрации
+        function approveRegistration(userId) {
+            fetch('http://127.0.0.1:5000/api/v1/approve_registration', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ user_id: userId })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Сетевая ошибка');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Успех:', data);
+                // Обновляем таблицу после одобрения
+                fetchRegistrationRequests();
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+            });
+        }
+
+        window.onload = function() {
+            fetchRegistrationRequests(); // Вызов функции для получения заявок на регистрацию
+        };
+    </script>
+</body>
+</html>

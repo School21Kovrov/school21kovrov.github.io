@@ -1,0 +1,60 @@
+body{
+    background-color: #03AFF7;
+}
+.row{
+    display: flex;
+    justify-content: center;
+    align-items: center;      /* Центрирование по вертикали */
+    flex-wrap: wrap;
+    max-width: 100%;           /* Уменьшено до 50% */
+              /* Установлена фиксированная высота */
+    margin: auto;
+    padding: 20px;
+    
+}
+.login-text{
+    margin-top: 100px;
+    font-family: 'Oswald', serif;
+    font-weight: 400;
+    font-size: 40px;
+    color: #fff;
+}
+.login-input {
+    font-family: 'Oswald', serif;
+    font-size: 20px;
+    color: #000;
+    border-radius: 8px;
+    border: none;
+    width: 80%;
+    font-weight: 400;
+    transition: box-shadow 0.3s ease; /* Плавный переход для тени */
+    padding: 5px 0px 5px 20px;
+}
+
+
+.login-input:focus {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Тень при фокусе */
+    outline: none; /* Убираем стандартный контур при фокусе */
+
+}
+.login-button{
+    font-family: 'Oswald', serif;
+    font-weight: 400;
+    font-size: 20px;
+    color: #ffff;
+    background-color: transparent;
+    border-radius: 20px;
+    width: 80%;
+    border: 2px solid #fff;
+}
+
+.none_account{
+    display: inline-block;
+    font-family: 'Oswald', serif;
+    font-weight: 400;
+    font-size: 20px;
+    color: #fff;
+}
+.none_account a{
+    color: #fff;
+}

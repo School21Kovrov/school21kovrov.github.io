@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>main</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="class">
+
+                <button class="button-orange class-button" data-class="5">5</button>
+                <button class="button-orange class-button" data-class="6">6</button>
+                <button class="button-orange class-button" data-class="7">7</button>
+                <button class="button-orange class-button" data-class="8">8</button>
+                <button class="button-orange class-button" data-class="9">9</button>
+                <button class="button-orange class-button" data-class="10">10</button>
+                <button class="button-orange class-button" data-class="11">11</button>
+            </div>
+        </div>
+        <div class="row litera">
+            <button class="button-red litera-button" data-litera="А">А</button>
+            <button class="button-red litera-button" data-litera="Б">Б</button>
+            <button class="button-red litera-button" data-litera="В">В</button>
+            <button class="button-red litera-button" data-litera="Г">Г</button>
+            <button class="button-red litera-button" data-litera="Д">Д</button>
+        </div>
+        <div class="row">
+            <div class="day">
+                <button class="monday button-blue" >Пн</button>
+                <button class="tuesday button-blue">Вт</button>
+                <button class="wednesday button-blue">Ср</button>
+                <button class="thursday button-blue">Чт</button>
+                <button class="friday button-blue">Пт</button>
+            </div>
+        </div>
+        <div class="row get-schedule-button">
+            <button id="get-schedule" class="button-blue-outline">Получить расписание</button>
+        </div>
+        <div class="row">
+            <div class="timetable">
+            <table id="schedule-table" class="table">
+                <thead>
+                    <tr>
+                        <th>Номер урока</th>
+                        <th>Урок</th>
+                        <th>Время</th>
+                        <th>Кабинет</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        let selectedClass = '';
+        let selectedLitera = '';
+        let selectedDay = '';
+
+        document.querySelectorAll('.class-button').forEach(button => {
+            button.addEventListener('click', () => {
+                selectedClass = button.dataset.class;
+                console.log(`Выбран класс: ${selectedClass}`);
+            });
+        });
+
+        document.querySelectorAll('.litera-button').forEach(button => {
+            button.addEventListener('click', () => {
+                selectedLitera = button.dataset.litera;
+                console.log(`Выбрана буква: ${selectedLitera}`);
+            });
+        });
+
+        document.querySelectorAll('.button-blue').forEach(button => {
+            button.addEventListener('click', () => {
+                const dayMap = {
+                    'Пн': 'monday',
+                    'Вт': 'tuesday',
+                    'Ср': 'wednesday',
+                    'Чт': 'thursday',
+                    'Пт': 'friday'
+                };
+                selectedDay = dayMap[button.textContent];
+                console.log(`Выбран день: ${selectedDay}`);
+            });
+        });
+
+        document.getElementById('get-schedule').addEventListener('click', () => {
+            if (selectedClass && selectedLitera && selectedDay) {
+                const url = `http://127.0.0.1:5000/api/v1/get_schedule?class=${selectedClass}${selectedLitera}&day=${selectedDay}`;
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Сеть не отвечает');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const tbody = document.querySelector('#schedule-table tbody');
+                        tbody.innerHTML = '';
+                        data.forEach(item => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${item[0] || 'N/A'}</td>
+                                <td>${item[2] || 'N/A'}</td>
+                                <td class="time">${item[1] || ''}</td>
+                                <td>${item[3] || ''}</td>
+                            `;
+                            tbody.appendChild(row);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Ошибка:', error);
+                    });
+            } else {
+                alert('Пожалуйста, выберите класс, букву и день недели.');
+            }
+        });
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then((registration) => {
+                        console.log('Сервисный работник зарегистрирован с областью:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.error('Ошибка регистрации сервисного работника:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>

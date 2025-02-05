@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="login.css">
+    <script>
+        function register() {
+            const code = document.querySelector('input[name="code"]').value;
+            const fio = document.querySelector('input[name="fio"]').value;
+            const className = document.querySelector('input[name="class"]').value;
+            const login = document.querySelector('input[name="login"]').value;
+            const password = document.querySelector('input[name="password"]').value;
+
+            const data = {
+                code: code,
+                fio: fio,
+                class: className,
+                login: login,
+                password: password
+            };
+
+            fetch('http://127.0.0.1:5000/api/v1/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Успех:', data);
+                document.querySelector('input[name="code"]').value = '';
+                document.querySelector('input[name="fio"]').value = '';
+                document.querySelector('input[name="class"]').value = '';
+                document.querySelector('input[name="login"]').value = '';
+                document.querySelector('input[name="password"]').value = '';
+                alert(data.error);
+            })
+            .catch((error) => {
+                alert('Ошибка:', error);
+            });
+
+
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        
+        <div class="row">
+            <p class="login-text">Регистрация</p>
+        </div>
+        <div class="row">
+            <input type="text" name="code" class="login-input" placeholder="Код учреждения">
+        </div>
+        <div class="row">
+            <input type="text" name="fio" class="login-input" placeholder="ФИО">
+        </div>
+        <div class="row">
+            <input type="text" name="class" class="login-input" placeholder="Класс">
+        </div>
+        <div class="row">
+            <input type="text" name="login" class="login-input" placeholder="Логин">
+        </div>
+        <div class="row">
+            <input type="password" name="password" class="login-input" placeholder="Пароль">
+        </div>
+        <div class="row">
+            <button class="login-button" onclick="register()">Отправить заявку</button>
+        </div>
+        <div class="row txt">
+            <a href="index.html" class="none_account">Уже есть аккаунт? Войдите</a>
+        </div>
+    </div>
+</body>
+</html>
