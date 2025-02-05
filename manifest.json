@@ -1,7 +1,7 @@
 {
     "name": "Ваше приложение",
     "short_name": "Приложение",
-    "start_url": "main.html",
+    "start_url": "index.html",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#ffffff",
