@@ -6,6 +6,12 @@ self.addEventListener('install', (event) => {
                 'style.css',
                 'icon-192x192.png',
                 'icon-512x512.png',
+                'index.html',
+                'login.css',
+                'admin.css',
+                'admin.html',
+                'register.html',
+                
                 // Добавьте другие файлы, которые нужно кэшировать
             ]);
         })
